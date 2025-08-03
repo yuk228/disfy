@@ -48,9 +48,9 @@ class General(commands.Cog):
     async def purge(
         self,
         ctx: commands.Context,
+        amount: int,
+        limit: float,
         channel_id: int = None,
-        amount: int = 100,
-        limit: float = 1.45,
     ):
         count = 0
         channel = self.bot.get_channel(int(channel_id)) if channel_id else ctx.channel
