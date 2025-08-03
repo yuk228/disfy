@@ -1,5 +1,14 @@
-litellm
-colorama
-audioop-lts
-python-dotenv
+# Discord
 discord.py-self
+
+# Formatter
+black
+isort
+
+# LLM
+litellm
+
+# Utils
+requests
+colorama
+python-dotenv
