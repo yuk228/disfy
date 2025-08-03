@@ -1,3 +1,4 @@
+import asyncio
 import time
 
 import discord
@@ -88,22 +89,26 @@ class General(commands.Cog):
             return
         await ctx.message.add_reaction("🔄")
         try:
+            message = await ctx.send(f"Gemini-2.0-flash: Generating...")
             image_url = (
                 ctx.message.attachments[0].url if ctx.message.attachments else None
             )
-            print(image_url)
-            response = await generate_text_with_gemini(prompt, image_url=image_url)
-
-            chunks = [response[i : i + 1900] for i in range(0, len(response), 1900)]
-            for i, chunk in enumerate(chunks):
-                if i == 0:
-                    await ctx.reply(f"Gemini-2.0-flash: {chunk}")
-                else:
-                    await ctx.send(chunk)
+            full_content = ""
+            async for _, full in generate_text_with_gemini(
+                prompt, image_url=image_url
+            ):
+                full_content = full
+                chunks = [full_content[i:i+1900] for i in range(0, len(full_content), 1900)]
+                for i, chunk in enumerate(chunks):
+                    if i == 0:
+                        await message.edit(content=f"Gemini-2.0-flash: {chunk}")
+                    else:
+                        await ctx.send(chunk)
+                    await asyncio.sleep(0.45)
             await ctx.message.add_reaction("✅")
             await ctx.message.remove_reaction("🔄", ctx.author)
-        except Exception as e:
-            print(Fore.RED + "[ERROR]" + Fore.RESET + f" {e}")
+            return
+        except Exception:
             await ctx.message.add_reaction("❌")
             await ctx.message.remove_reaction("🔄", ctx.author)
 

@@ -16,5 +16,12 @@ async def generate_text_with_gemini(
         + ([{"role": "user", "content": image_url}] if image_url else []),
         max_tokens=max_tokens,
         api_key=GEMINI_API_KEY,
+        stream=True,
     )
-    return cast(str, response.choices[0].message.content)
+
+    full_content = ""
+    for chunk in response:
+        content = chunk.choices[0].delta.content
+        if content:
+            full_content += content
+            yield content, full_content
