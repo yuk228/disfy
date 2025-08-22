@@ -9,6 +9,15 @@ isort
 litellm
 
 # Utils
+setuptools
 requests
 colorama
 python-dotenv
+
+# Network
+requests
+beautifulsoup4
+playwright
+
+# Downloader
+downloadm3u8

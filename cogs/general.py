@@ -6,6 +6,7 @@ from colorama import Fore
 from discord.ext import commands
 
 from config.settings import DISCORD_PREFIX
+from services.downloader import Downloader
 from services.llm import generate_text_with_gemini
 
 
@@ -94,11 +95,12 @@ class General(commands.Cog):
                 ctx.message.attachments[0].url if ctx.message.attachments else None
             )
             full_content = ""
-            async for _, full in generate_text_with_gemini(
-                prompt, image_url=image_url
-            ):
+            async for _, full in generate_text_with_gemini(prompt, image_url=image_url):
                 full_content = full
-                chunks = [full_content[i:i+1900] for i in range(0, len(full_content), 1900)]
+                chunks = [
+                    full_content[i : i + 1900]
+                    for i in range(0, len(full_content), 1900)
+                ]
                 for i, chunk in enumerate(chunks):
                     if i == 0:
                         await message.edit(content=f"Gemini-2.0-flash: {chunk}")

@@ -10,6 +10,7 @@ async def on_ready():
     print(f"[Logged in as {client.user}]\nLatency: {client.latency*1000}ms")
     await client.load_extension("cogs.general")
     await client.load_extension("cogs.chat")
+    await client.load_extension("cogs.logger")
 
 
 if __name__ == "__main__":
